@@ -1,0 +1,13 @@
+
+h1 {
+	float: right;
+}
+
+.gif-div {
+	float: left;
+	margin: 10px 5px;
+}
+
+.jumbotron {
+	overflow: auto;
+}

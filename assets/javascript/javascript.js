@@ -1,22 +1,19 @@
 
-	var topics = ["cat", "dog", "ferret", "raccoon", "sloth"];
-	
-	
-	
+var topics = ["cat", "dog", "ferret", "raccoon", "sloth"];
 
 //Declare an array of pre-defined buttons, and dynamically create buttons for each index
 	for (var i = 0; i < topics.length; i++) {
-		$("#buttons").append('<button class="topic-button btn btn-primary" topic="' + topics[i] + '">' + topics[i] + '</button>');
-
+		addButton(topics[i]);
 	}
 
 //Take user inputs as a search term
+function addButton(topic) {
+	$("#buttons").append('<button class="topic-button btn btn-primary" topic="' + topic + '">' + topic + '</button>');
+}
 
-//Send a user input as a searcha request to the giphy API, return 10 gif JSON objects
-$(document).on("click", ".topic-button", function(){
+function APIrequest(search) {
 	$("#gifs").empty();
-	var search = $(this).attr("topic");
-	var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=cb04bd6c938f44708d8dd7cbbefb25ad&q=" + search + "&limit=10&offset=0&rating=G&lang=en";
+	var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=cb04bd6c938f44708d8dd7cbbefb25ad&q=" + search + "&limit=10&offset=0&lang=en";
 
 	$.ajax({
 		url: queryURL, 
@@ -31,8 +28,8 @@ $(document).on("click", ".topic-button", function(){
 			var still = result[i].images.fixed_height_still.url;
 			var rating = result[i].rating;
 
-			var gifDiv = $("<div>")
-			var gifImg = $("<img>")
+			var gifDiv = $("<div>").addClass("gif-div");
+			var gifImg = $("<img>");
 			var p = $("<p>");
 
 			p.html("rating: " + rating);
@@ -42,6 +39,15 @@ $(document).on("click", ".topic-button", function(){
 			$("#gifs").prepend(gifDiv);
 		}
 	});
+
+}
+
+//Send a user input as a searcha request to the giphy API, return 10 gif JSON objects
+$(document).on("click", ".topic-button", function(){
+	
+	var topic = $(this).attr("topic");
+	
+	APIrequest(topic);
 });
 
 $(document).on("click", "img", function(){
@@ -58,13 +64,17 @@ $(document).on("click", "img", function(){
 });
 
 $(document).on("click", "#search-button", function(event){
-	console.log("test");
-
 	event.preventDefault();
 
-	console.log($("#search-term").val().trim());
+	var search = $("#search-term").val().trim()
 
-	// console.log(searchTerm);
+	if (search === "") {
+
+	}
+	else {
+	APIrequest(search);
+	addButton(search);
+	}
 });
 //Display gifs with their ratings, and add funtionaality to play/pause on click
 
